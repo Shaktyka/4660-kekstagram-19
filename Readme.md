@@ -1,7 +1,7 @@
 # Личный проект «Кекстаграм» [![Build status][travis-image]][travis-url]
 
 * Студент: [Елена Петренко](https://up.htmlacademy.ru/javascript/19/user/4660).
-* Наставник: `Неизвестно`.
+* Наставник: `Без наставника`.
 
 ---
 
