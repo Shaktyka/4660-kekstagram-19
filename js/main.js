@@ -24,19 +24,20 @@ var comments = [
 // Генерирует комментарий
 var getCommentData = function () {
   return {
-    avatar: 'img/avatar-6.svg',
-    message: 'В целом всё неплохо. Но не всё.',
-    name: 'Артем'
+    'avatar': 'img/avatar-6.svg',
+    'message': 'В целом всё неплохо. Но не всё.',
+    'name': 'Артем'
   };
 };
 
 // Рендерим массив комментариев
 var getComments = function (amount) {
   var comments = [];
-  for (var i = 0; i < amount.length; i++) {
+  for (var i = 0; i < amount; i++) {
     var comment = getCommentData();
     comments.push(comment);
   }
+  return comments;
 };
 
 // Генерирует один объект данных для массива
@@ -45,17 +46,18 @@ var getPhotoData = function (number) {
     'url': 'photos/' + number + '.jpg',
     'description': '',
     'likes': 2,
-    'comments': getComments(10)
+    'comments': getComments(3)
   };
 };
 
 
 // Генерирует массив фотографий
 var generatePhotoData = function () {
-  for (var i = 0; i < PHOTO_AMOUNT.length; i++) {
+  for (var i = 0; i < PHOTO_AMOUNT; i++) {
     var photoData = getPhotoData(i);
     photos.push(photoData);
   }
 };
 
 generatePhotoData();
+console.log(photos);
