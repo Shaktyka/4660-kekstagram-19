@@ -2,9 +2,22 @@
 
 var bigPicture = document.querySelector('.big-picture');
 
-// Рендерим один комментарий
-var renderComment = function (data) {
+// Рендеринг элемента из разметки
+var createElement = function (string) {
+  var div = document.createElement('div');
+  div.innerHTML = string;
+  return div.firstChild;
+};
 
+// Собираем один комментарий
+var renderCommentString = function (data) {
+  return '<li class="social__comment"><img class="social__picture" src="'
+    + data.avatar
+    + '" alt="'
+    + data.name
+    + '" width="35" height="35"><p class="social__text">'
+    + data.message
+    + '</p></li>';
 };
 
 // Рендерим список комментариев
@@ -14,9 +27,10 @@ var renderComments = function (container, comments) {
   }
   var fragment = new DocumentFragment();
   for (var i = 0; i < comments.length; i++) {
-    var comment = renderComment(comments[i]);
+    var comment = createElement(renderCommentString(comments[i]));
     fragment.appendChild(comment);
   }
+  container.innerHTML = '';
   container.appendChild(fragment);
 };
 
