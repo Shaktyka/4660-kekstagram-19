@@ -1,5 +1,10 @@
 'use strict';
 
+var KeyCodes = {
+  ESCAPE: 'Escape',
+  ENTER: 'Enter'
+};
+
 var bigPicture = document.querySelector('.big-picture');
 
 // Рендеринг элемента из разметки
@@ -38,13 +43,20 @@ var renderComments = function (container, comments) {
 var closePhoto = function () {
   bigPicture.classList.add('hidden');
   bigPicture.querySelector('.big-picture__cancel').removeEventListener('click', cancelBtnClickHandler);
-  document.querySelector('body').classList.remove('modal-open');
+  document.body.classList.remove('modal-open');
 };
 
 // Обработчик нажатия на кнопку закрытия окна
 var cancelBtnClickHandler = function (evt) {
   evt.preventDefault();
   closePhoto();
+};
+
+// Обработчик нажатий на клавиатуру
+var bodyKeyDownHandler = function (evt) {
+  if (evt.code === KeyCodes.ESCAPE) {
+    closePhoto();
+  }
 };
 
 var showPicture = function (data) {
@@ -68,7 +80,9 @@ var showPicture = function (data) {
   cancelBtn.addEventListener('click', cancelBtnClickHandler);
 
   bigPicture.classList.remove('hidden');
-  document.querySelector('body').classList.add('modal-open');
+  document.body.classList.add('modal-open');
+
+  document.body.addEventListener('keydown', bodyKeyDownHandler);
 };
 
 showPicture(photos[0]);
