@@ -59,6 +59,7 @@ var bodyKeyDownHandler = function (evt) {
   }
 };
 
+// Открывает окно с фото
 var showPicture = function (data) {
   if (!data || !bigPicture) {
     return;
@@ -85,4 +86,4 @@ var showPicture = function (data) {
   document.body.addEventListener('keydown', bodyKeyDownHandler);
 };
 
-showPicture(photos[0]);
+// showPicture(photos[0]);

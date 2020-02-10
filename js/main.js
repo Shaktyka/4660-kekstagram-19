@@ -77,6 +77,7 @@ var getComments = function (amount) {
 // Генерирует один объект данных для массива
 var getPhotoData = function (number) {
   return {
+    'id': number,
     'url': 'photos/' + number + '.jpg',
     'description': photoDescriptions[getRandomNumber(0, photoDescriptions.length - 1)],
     'likes': getRandomNumber(LIKES_MIN, LIKES_MAX),
