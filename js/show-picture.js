@@ -86,4 +86,4 @@ var showPicture = function (data) {
   document.body.addEventListener('keydown', bodyKeyDownHandler);
 };
 
-// showPicture(photos[0]);
+showPicture(photos[0]);
