@@ -2,11 +2,40 @@
 
 var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
 
+var ImgScale = {
+  MIN: 0,
+  MAX: 100,
+  STEP: 25,
+  CSS_MAX_VALUE: 1
+};
+
+var Keycode = {
+  ESC: 27,
+  ENTER: 13
+};
+
+// Проверить
+var EffectClassName = {
+  'none': 'effects__preview--none',
+  'chrome': 'effects__preview--chrome',
+  'sepia': 'effects__preview--sepia',
+  'marvin': 'effects__preview--marvin',
+  'phobos': 'effects__preview--phobos',
+  'heat': 'effects__preview--heat'
+};
+
 var uploadField = document.querySelector('#upload-file');
 var editPhotoWindow = document.querySelector('.img-upload__overlay');
 var imgPreview = document.querySelector('.img-upload__preview img');
 var editCloseBtn = editPhotoWindow.querySelector('.img-upload__cancel');
 var editSubmitBtn = editPhotoWindow.querySelector('.img-upload__submit');
+var minusScaleBtn = editPhotoWindow.querySelector('.scale__control--smaller');
+var plusScaleBtn = editPhotoWindow.querySelector('.scale__control--bigger');
+var scaleValueField = editPhotoWindow.querySelector('.scale__control--value');
+
+var effectInputs = editPhotoWindow.querySelectorAll('.effects__radio');
+var currentEffect = null;
+var currentImageEffectClass = 'effects__preview--none';
 
 // Закрытие окна редактирования фото
 var closeEditPhotoWindow = function () {
@@ -34,14 +63,69 @@ var bodyKeydownHandler = function (evt) {
   }
 };
 
+// Начальные настройки окна ред-ния фото
+var initEditPhotoWindowSettings = function () {
+
+};
+
+// Обработчик изменений состояния радиобаттонов
+var effectInputChangeHandler = function () {
+
+};
+
+// Уменьшение размера изображения
+var minusImageScale = function (scaleValue) {
+  var value = parseInt(scaleValue.match(/\d+/), 10);
+  if (value > 0) {
+    var smallerValue = value - ImgScale.STEP;
+    scaleValueField.value = smallerValue + '%';
+    imgPreview.style.transform = 'scale(' + smallerValue / 100 + ')';
+  }
+};
+
+// Увеличение размера изображения
+var plusImageScale = function (scaleValue) {
+  var value = parseInt(scaleValue.match(/\d+/), 10);
+  if (value < 100) {
+    var biggerValue = value + ImgScale.STEP;
+    scaleValueField.value = biggerValue + '%';
+    imgPreview.style.transform = 'scale(' + biggerValue / 100 + ')';
+  }
+};
+
+// Обработчик нажатия на кнопку уменьшения размера окна
+var minusScaleBtnClickHandler = function (evt) {
+  evt.preventDefault();
+  minusImageScale(scaleValueField.value);
+};
+
+// Обработчик нажатия на кнопку увеличения размера окна
+var plusScaleBtnClickHandler = function (evt) {
+  evt.preventDefault();
+  plusImageScale(scaleValueField.value);
+};
+
 // Открытие окна редактирования фото
 var openEditPhotoWindow = function () {
   editPhotoWindow.classList.remove('hidden');
-  editCloseBtn.addEventListener('click', editCloseBtnClickHandler);
-  editSubmitBtn.addEventListener('click', editSubmitBtnClickHandler);
+  editCloseBtn.addEventListener('click', editCloseBtnClickHandler); // кнопка "Закрыть"
+  editSubmitBtn.addEventListener('click', editSubmitBtnClickHandler); // кнопка "Отправить" 
+  document.body.addEventListener('keydown', bodyKeydownHandler); // тут надо проверять на фокус в полях окна
+  
+  // Нажатие на "-"
+  minusScaleBtn.addEventListener('click', minusScaleBtnClickHandler);
+  // Нажатие на "+"
+  plusScaleBtn.addEventListener('click', plusScaleBtnClickHandler);
+
+  // Обработчики на радиобаттоны (подумать насчёт повесить обработчик на контейнер радиобаттонов)
+  effectInputs.forEach(function (input) {
+    input.addEventListener('change', effectInputChangeHandler);
+  });
+
+  // Начальные настройки элементов окна
+  initEditPhotoWindowSettings();
 
   document.body.classList.add('modal-open');
-  document.body.addEventListener('keydown', bodyKeydownHandler);
 };
 
 // Обработчик загрузки фото
