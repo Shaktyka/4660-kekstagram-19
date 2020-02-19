@@ -99,6 +99,6 @@ var documentKeydownHandler = function (evt) {
   };
 
   // openSuccessPopup();
-  openErrorPopup();
+  // openErrorPopup();
 
 })();

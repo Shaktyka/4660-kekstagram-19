@@ -14,6 +14,7 @@ var closeEditPhotoWindow = function () {
   imgPreview.src = '';
   editCloseBtn.removeEventListener('click', editCloseBtnClickHandler);
   editSubmitBtn.removeEventListener('click', editSubmitBtnClickHandler);
+  document.body.classList.remove('modal-open');
   document.body.removeEventListener('keydown', bodyKeydownHandler);
 };
 
@@ -38,6 +39,8 @@ var openEditPhotoWindow = function () {
   editPhotoWindow.classList.remove('hidden');
   editCloseBtn.addEventListener('click', editCloseBtnClickHandler);
   editSubmitBtn.addEventListener('click', editSubmitBtnClickHandler);
+
+  document.body.classList.add('modal-open');
   document.body.addEventListener('keydown', bodyKeydownHandler);
 };
 
