@@ -1443,3 +1443,7 @@ main {
     grid-row: 1 / span 3;
   }
 }
+
+.invalid {
+  box-shadow: 0 0 6px 2px red;
+}

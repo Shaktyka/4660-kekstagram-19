@@ -63,7 +63,7 @@ var editCloseBtnClickHandler = function (evt) {
 };
 
 var bodyKeydownHandler = function (evt) {
-  if (evt.code === KeyCode.ESC) {
+  if (evt.code === Keycode.ESC) {
     closeEditPhotoWindow();
   }
 };
@@ -112,7 +112,9 @@ var plusScaleBtnClickHandler = function (evt) {
 
 // Обработка сабмита формы
 var uploadFormSubmitHandler = function (evt) {
-
+  evt.preventDefault();
+  var formData = new FormData(uploadForm);
+  // console.log(formData.get('description'));
 };
 
 // Открытие окна редактирования фото
