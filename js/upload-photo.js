@@ -14,6 +14,7 @@ var closeEditPhotoWindow = function () {
   imgPreview.src = '';
   editCloseBtn.removeEventListener('click', editCloseBtnClickHandler);
   editSubmitBtn.removeEventListener('click', editSubmitBtnClickHandler);
+  document.body.removeEventListener('keydown', bodyKeydownHandler);
 };
 
 var editSubmitBtnClickHandler = function (evt) {
@@ -26,11 +27,18 @@ var editCloseBtnClickHandler = function (evt) {
   closeEditPhotoWindow();
 };
 
+var bodyKeydownHandler = function (evt) {
+  if (evt.code === KeyCodes.ESCAPE) {
+    closeEditPhotoWindow();
+  }
+};
+
 // Открытие окна редактирования фото
 var openEditPhotoWindow = function () {
   editPhotoWindow.classList.remove('hidden');
   editCloseBtn.addEventListener('click', editCloseBtnClickHandler);
   editSubmitBtn.addEventListener('click', editSubmitBtnClickHandler);
+  document.body.addEventListener('keydown', bodyKeydownHandler);
 };
 
 // Обработчик загрузки фото
