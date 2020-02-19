@@ -37,12 +37,17 @@ var effectInputs = editPhotoWindow.querySelectorAll('.effects__radio');
 var currentEffect = null;
 var currentImageEffectClass = 'effects__preview--none';
 
+var uploadForm = document.querySelector('.img-upload__form');
+var hashField = uploadForm.querySelector('.text__hashtags');
+var commentField = uploadForm.querySelector('.text__description');
+
 // Закрытие окна редактирования фото
 var closeEditPhotoWindow = function () {
   editPhotoWindow.classList.add('hidden');
   imgPreview.src = '';
   editCloseBtn.removeEventListener('click', editCloseBtnClickHandler);
-  editSubmitBtn.removeEventListener('click', editSubmitBtnClickHandler);
+  // editSubmitBtn.removeEventListener('click', editSubmitBtnClickHandler);
+  uploadForm.removeEventListener('submit', uploadFormSubmitHandler);
   document.body.classList.remove('modal-open');
   document.body.removeEventListener('keydown', bodyKeydownHandler);
 };
@@ -58,7 +63,7 @@ var editCloseBtnClickHandler = function (evt) {
 };
 
 var bodyKeydownHandler = function (evt) {
-  if (evt.code === KeyCodes.ESCAPE) {
+  if (evt.code === KeyCode.ESC) {
     closeEditPhotoWindow();
   }
 };
@@ -105,13 +110,18 @@ var plusScaleBtnClickHandler = function (evt) {
   plusImageScale(scaleValueField.value);
 };
 
+// Обработка сабмита формы
+var uploadFormSubmitHandler = function (evt) {
+
+};
+
 // Открытие окна редактирования фото
 var openEditPhotoWindow = function () {
-  editPhotoWindow.classList.remove('hidden');
+  // Начальные настройки элементов окна
+  initEditPhotoWindowSettings();
+
   editCloseBtn.addEventListener('click', editCloseBtnClickHandler); // кнопка "Закрыть"
-  editSubmitBtn.addEventListener('click', editSubmitBtnClickHandler); // кнопка "Отправить" 
-  document.body.addEventListener('keydown', bodyKeydownHandler); // тут надо проверять на фокус в полях окна
-  
+  // editSubmitBtn.addEventListener('click', editSubmitBtnClickHandler); // кнопка "Отправить"
   // Нажатие на "-"
   minusScaleBtn.addEventListener('click', minusScaleBtnClickHandler);
   // Нажатие на "+"
@@ -122,25 +132,27 @@ var openEditPhotoWindow = function () {
     input.addEventListener('change', effectInputChangeHandler);
   });
 
-  // Начальные настройки элементов окна
-  initEditPhotoWindowSettings();
+  // Обработчик на сабмит формы
+  uploadForm.addEventListener('submit', uploadFormSubmitHandler);
 
   document.body.classList.add('modal-open');
+  document.body.addEventListener('keydown', bodyKeydownHandler); // тут надо проверять на фокус в полях окна
+  editPhotoWindow.classList.remove('hidden');
 };
 
 // Обработчик загрузки фото
-var uploadFieldChangeHandler = function (evt) {
+var uploadFieldChangeHandler = function () {
   var file = uploadField.files[0];
   var fileName = file.name.toLowerCase();
 
-  var matches = FILE_TYPES.some(function(it) {
+  var matches = FILE_TYPES.some(function (it) {
     return fileName.endsWith(it);
   });
 
   if (matches) {
     var reader = new FileReader();
 
-    reader.addEventListener('load', function() {
+    reader.addEventListener('load', function () {
       imgPreview.src = reader.result;
     });
 
