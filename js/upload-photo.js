@@ -114,8 +114,36 @@ var plusScaleBtnClickHandler = function (evt) {
 var uploadFormSubmitHandler = function (evt) {
   evt.preventDefault();
   var formData = new FormData(uploadForm);
+
+  if (formData.get('description')) {
+    // Переделать на отслеживание ввода в поле на лету без учёта формдаты
+    var DESCRIPTION_MAX_LENGTH = 140;
+    var descrLength = commentField.value.length;
+    // console.log(descrLength);
+    if (descrLength > DESCRIPTION_MAX_LENGTH) {
+      commentField.classList.add('invalid');
+      commentField.setCustomValidity('Текст описания не должен превышать ' + DESCRIPTION_MAX_LENGTH + ' символов');
+    } else {
+      commentField.classList.remove('invalid');
+      commentField.setCustomValidity('');
+    }
+  }
+
+  if (formData.get('hashtags')) {
+    console.log(2);
+  }
   // console.log(formData.get('description'));
 };
+
+// Обработчик события invalid на поле description
+// var commentFieldInvalidHandler = function () {
+//   if (commentField.validity.tooLong) {
+//     commentField.setCustomValidity('Текст описания не должен превышать 140 символов');
+//     commentField.classList.add('invalid');
+//   } else {
+//     commentField.setCustomValidity('');
+//   }
+// };
 
 // Открытие окна редактирования фото
 var openEditPhotoWindow = function () {
@@ -133,6 +161,9 @@ var openEditPhotoWindow = function () {
   effectInputs.forEach(function (input) {
     input.addEventListener('change', effectInputChangeHandler);
   });
+
+  // Обработчик на поле описания
+  // commentField.addEventListener('invalid', commentFieldInvalidHandler);
 
   // Обработчик на сабмит формы
   uploadForm.addEventListener('submit', uploadFormSubmitHandler);
