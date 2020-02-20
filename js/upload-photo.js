@@ -127,6 +127,8 @@ var hashFieldInputHandler = function (evt) {
   var hashString = evt.target === hashField ? evt.target.value : '';
   var hashesArray = hashString.split(' ').filter(function (it) {
     return it != '';
+  }).map(function (it) {
+    return it.toLowerCase();
   });
   var hashSet = new Set(hashesArray); // Формируем сет
 
@@ -137,7 +139,7 @@ var hashFieldInputHandler = function (evt) {
     hashField.setCustomValidity('Хэштегов должно быть НЕ больше ' + HASHTAGS_MAX_AMOUNT);
     hashField.classList.add('invalid');
   } else if () {
-    
+
   } else {
     hashField.setCustomValidity('');
     hashField.classList.remove('invalid');
