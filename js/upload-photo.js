@@ -2,6 +2,7 @@
 
 var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
 var DESCRIPTION_MAX_LENGTH = 140;
+var HASHTAGS_MAX_AMOUNT = 5;
 
 var ImgScale = {
   MIN: 0,
@@ -124,12 +125,19 @@ var uploadFormSubmitHandler = function (evt) {
 // Обработчик события input на поле хэштэгов
 var hashFieldInputHandler = function (evt) {
   var hashString = evt.target === hashField ? evt.target.value : '';
-  var hashesArray = hashString.split(' ');
+  var hashesArray = hashString.split(' ').filter(function (it) {
+    return it != '';
+  });
   var hashSet = new Set(hashesArray); // Формируем сет
 
-  if (hashesArray.length > hashSet.length) {
+  if (hashesArray.length > hashSet.size) {
     hashField.setCustomValidity('Хэштеги не должны повторяться');
     hashField.classList.add('invalid');
+  } else if (hashSet.size > HASHTAGS_MAX_AMOUNT) {
+    hashField.setCustomValidity('Хэштегов должно быть НЕ больше ' + HASHTAGS_MAX_AMOUNT);
+    hashField.classList.add('invalid');
+  } else if () {
+    
   } else {
     hashField.setCustomValidity('');
     hashField.classList.remove('invalid');
