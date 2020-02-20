@@ -135,6 +135,17 @@ var checkByOneHashSymbol = function (set) {
   return hasOneHashSymbol;
 };
 
+// Проверка на длину элемента массива
+var checkElementLength = function (set) {
+  var isLongerThanTwenty = false;
+  for (var el of set) {
+    if (el.length > HASHTAG_MAX_LENGTH) {
+      isLongerThanTwenty = true;
+    }
+  }
+  return isLongerThanTwenty;
+};
+
 // Обработчик события input на поле хэштэгов
 var hashFieldInputHandler = function (evt) {
   var hashString = evt.target === hashField ? evt.target.value : '';
@@ -154,6 +165,9 @@ var hashFieldInputHandler = function (evt) {
     hashField.classList.add('invalid');
   } else if (checkByOneHashSymbol(hashSet)) {
     hashField.setCustomValidity('Хэштег не может состоять только из одного символа #');
+    hashField.classList.add('invalid');
+  } else if (checkElementLength(hashSet)) {
+    hashField.setCustomValidity('Максимальная длина одного хэш-тега - ' + HASHTAG_MAX_LENGTH +' символов');
     hashField.classList.add('invalid');
   } else {
     hashField.setCustomValidity('');
