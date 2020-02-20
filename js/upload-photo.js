@@ -114,14 +114,28 @@ var plusScaleBtnClickHandler = function (evt) {
 // Обработка сабмита формы
 var uploadFormSubmitHandler = function (evt) {
   evt.preventDefault();
-  var formData = new FormData(uploadForm);
 
-  // formData.get('description')
-  // formData.get('hashtags')
+  if (hashField.checkValidity() && descriptionField.checkValidity()) {
+    var formData = new FormData(uploadForm);
+    // Отправляем форму
+  }
 };
 
 // Обработчик события input на поле хэштэгов
-var hashFieldInputHandler = function () {
+var hashFieldInputHandler = function (evt) {
+  var hashString = evt.target === hashField ? evt.target.value : '';
+  var hashesArray = hashString.split(' ');
+  var hashSet = new Set(hashesArray); // Формируем сет
+
+  if (hashesArray.length > hashSet.length) {
+    hashField.setCustomValidity('Хэштеги не должны повторяться');
+    hashField.classList.add('invalid');
+  } else {
+    hashField.setCustomValidity('');
+    hashField.classList.remove('invalid');
+  }
+
+  // console.log(hashSet);
 };
 
 // Обработчик события input на поле description
