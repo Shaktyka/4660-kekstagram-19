@@ -3,6 +3,7 @@
 var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
 var DESCRIPTION_MAX_LENGTH = 140;
 var HASHTAGS_MAX_AMOUNT = 5;
+var HASHTAG_MAX_LENGTH = 20;
 
 var ImgScale = {
   MIN: 0,
@@ -122,6 +123,18 @@ var uploadFormSubmitHandler = function (evt) {
   }
 };
 
+// Проверка сета на единичный элемент решётки
+var checkByOneHashSymbol = function (set) {
+  var hasOneHashSymbol = false;
+  for (var el of set) {
+    if (el.length === 1 && el === '#') {
+      hasOneHashSymbol = true;
+      break;
+    }
+  }
+  return hasOneHashSymbol;
+};
+
 // Обработчик события input на поле хэштэгов
 var hashFieldInputHandler = function (evt) {
   var hashString = evt.target === hashField ? evt.target.value : '';
@@ -130,6 +143,7 @@ var hashFieldInputHandler = function (evt) {
   }).map(function (it) {
     return it.toLowerCase();
   });
+
   var hashSet = new Set(hashesArray); // Формируем сет
 
   if (hashesArray.length > hashSet.size) {
@@ -138,8 +152,9 @@ var hashFieldInputHandler = function (evt) {
   } else if (hashSet.size > HASHTAGS_MAX_AMOUNT) {
     hashField.setCustomValidity('Хэштегов должно быть НЕ больше ' + HASHTAGS_MAX_AMOUNT);
     hashField.classList.add('invalid');
-  } else if () {
-
+  } else if (checkByOneHashSymbol(hashSet)) {
+    hashField.setCustomValidity('Хэштег не может состоять только из одного символа #');
+    hashField.classList.add('invalid');
   } else {
     hashField.setCustomValidity('');
     hashField.classList.remove('invalid');
