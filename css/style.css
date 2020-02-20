@@ -1444,6 +1444,7 @@ main {
   }
 }
 
-.invalid {
+input.invalid,
+textarea.invalid {
   box-shadow: 0 0 6px 2px red;
 }

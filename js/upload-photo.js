@@ -1,6 +1,7 @@
 'use strict';
 
 var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
+var DESCRIPTION_MAX_LENGTH = 140;
 
 var ImgScale = {
   MIN: 0,
@@ -9,7 +10,7 @@ var ImgScale = {
   CSS_MAX_VALUE: 1
 };
 
-var Keycode = {
+var KeyCode = {
   ESC: 27,
   ENTER: 13
 };
@@ -39,7 +40,7 @@ var currentImageEffectClass = 'effects__preview--none';
 
 var uploadForm = document.querySelector('.img-upload__form');
 var hashField = uploadForm.querySelector('.text__hashtags');
-var commentField = uploadForm.querySelector('.text__description');
+var descriptionField = uploadForm.querySelector('.text__description');
 
 // Закрытие окна редактирования фото
 var closeEditPhotoWindow = function () {
@@ -63,7 +64,7 @@ var editCloseBtnClickHandler = function (evt) {
 };
 
 var bodyKeydownHandler = function (evt) {
-  if (evt.code === Keycode.ESC) {
+  if (evt.code === KeyCode.ESC) {
     closeEditPhotoWindow();
   }
 };
@@ -115,56 +116,44 @@ var uploadFormSubmitHandler = function (evt) {
   evt.preventDefault();
   var formData = new FormData(uploadForm);
 
-  if (formData.get('description')) {
-    // Переделать на отслеживание ввода в поле на лету без учёта формдаты
-    var DESCRIPTION_MAX_LENGTH = 140;
-    var descrLength = commentField.value.length;
-    // console.log(descrLength);
-    if (descrLength > DESCRIPTION_MAX_LENGTH) {
-      commentField.classList.add('invalid');
-      commentField.setCustomValidity('Текст описания не должен превышать ' + DESCRIPTION_MAX_LENGTH + ' символов');
-    } else {
-      commentField.classList.remove('invalid');
-      commentField.setCustomValidity('');
-    }
-  }
-
-  if (formData.get('hashtags')) {
-    console.log(2);
-  }
-  // console.log(formData.get('description'));
+  // formData.get('description')
+  // formData.get('hashtags')
 };
 
-// Обработчик события invalid на поле description
-// var commentFieldInvalidHandler = function () {
-//   if (commentField.validity.tooLong) {
-//     commentField.setCustomValidity('Текст описания не должен превышать 140 символов');
-//     commentField.classList.add('invalid');
-//   } else {
-//     commentField.setCustomValidity('');
-//   }
-// };
+// Обработчик события input на поле хэштэгов
+var hashFieldInputHandler = function () {
+};
+
+// Обработчик события input на поле description
+var descriptionFieldInputHandler = function () {
+  var descrLength = descriptionField.value.length;
+  if (descrLength > DESCRIPTION_MAX_LENGTH) {
+    descriptionField.setCustomValidity('Текст описания не должен превышать ' + DESCRIPTION_MAX_LENGTH + ' символов, сейчас ' + descrLength + ' символов.');
+    descriptionField.classList.add('invalid');
+  } else {
+    descriptionField.setCustomValidity('');
+    descriptionField.classList.remove('invalid');
+  }
+};
 
 // Открытие окна редактирования фото
 var openEditPhotoWindow = function () {
   // Начальные настройки элементов окна
   initEditPhotoWindowSettings();
-
   editCloseBtn.addEventListener('click', editCloseBtnClickHandler); // кнопка "Закрыть"
   // editSubmitBtn.addEventListener('click', editSubmitBtnClickHandler); // кнопка "Отправить"
   // Нажатие на "-"
   minusScaleBtn.addEventListener('click', minusScaleBtnClickHandler);
   // Нажатие на "+"
   plusScaleBtn.addEventListener('click', plusScaleBtnClickHandler);
-
   // Обработчики на радиобаттоны (подумать насчёт повесить обработчик на контейнер радиобаттонов)
   effectInputs.forEach(function (input) {
     input.addEventListener('change', effectInputChangeHandler);
   });
-
-  // Обработчик на поле описания
-  // commentField.addEventListener('invalid', commentFieldInvalidHandler);
-
+  // Отслеживание ввода в поле описания
+  descriptionField.addEventListener('input', descriptionFieldInputHandler);
+  // Отслеживание ввода в поле хэштегов
+  hashField.addEventListener('input', hashFieldInputHandler);
   // Обработчик на сабмит формы
   uploadForm.addEventListener('submit', uploadFormSubmitHandler);
 
@@ -195,4 +184,5 @@ var uploadFieldChangeHandler = function () {
   openEditPhotoWindow();
 };
 
+// Вешаем обработчик на поле загрузки файла
 uploadField.addEventListener('change', uploadFieldChangeHandler);
