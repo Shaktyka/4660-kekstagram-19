@@ -157,17 +157,24 @@ var hashFieldInputHandler = function (evt) {
 
   var hashSet = new Set(hashesArray); // Формируем сет
 
+  var HashValidText = {
+    DO_NOT_REPEAT: 'Хэштеги не должны повторяться',
+    NO_MORE_TAGS: 'Хэштегов должно быть НЕ больше ',
+    NOT_ONE_HASH_SYMBOL: 'Хэштег не может состоять только из одного символа #',
+    NOT_LONGER_HASH: 'Максимальное количество символов в одном хэше - '
+  };
+
   if (hashesArray.length > hashSet.size) {
-    hashField.setCustomValidity('Хэштеги не должны повторяться');
+    hashField.setCustomValidity(HashValidText.DO_NOT_REPEAT);
     hashField.classList.add('invalid');
   } else if (hashSet.size > HASHTAGS_MAX_AMOUNT) {
-    hashField.setCustomValidity('Хэштегов должно быть НЕ больше ' + HASHTAGS_MAX_AMOUNT);
+    hashField.setCustomValidity(HashValidText.NO_MORE_TAGS + HASHTAGS_MAX_AMOUNT);
     hashField.classList.add('invalid');
   } else if (checkByOneHashSymbol(hashSet)) {
-    hashField.setCustomValidity('Хэштег не может состоять только из одного символа #');
+    hashField.setCustomValidity(HashValidText.NOT_ONE_HASH_SYMBOL);
     hashField.classList.add('invalid');
   } else if (checkElementLength(hashSet)) {
-    hashField.setCustomValidity('Максимальная длина одного хэш-тега - ' + HASHTAG_MAX_LENGTH +' символов');
+    hashField.setCustomValidity(HashValidText.NOT_LONGER_HASH + HASHTAG_MAX_LENGTH);
     hashField.classList.add('invalid');
   } else {
     hashField.setCustomValidity('');
