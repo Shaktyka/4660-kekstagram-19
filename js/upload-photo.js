@@ -17,6 +17,15 @@ var KeyCode = {
   ENTER: 13
 };
 
+var HashValidText = {
+  DO_NOT_REPEAT: 'Хэш-теги не должны повторяться',
+  NO_MORE_TAGS: 'Хэш-тегов должно быть НЕ больше ',
+  NOT_ONE_HASH_SYMBOL: 'Хэш-тег не может состоять только из одного символа #',
+  NOT_LONGER_HASH: 'Максимальное количество символов в одном хэш-теге - ',
+  NEED_FIRST_HASH: 'Хэш-тег должен начинаться с символа #',
+  ONLY_LETTERS_NUMBERS: 'Cтрока после # может содержать только буквы и числа'
+};
+
 // Проверить
 var EffectClassName = {
   'none': 'effects__preview--none',
@@ -146,6 +155,33 @@ var checkElementLength = function (set) {
   return isLongerThanTwenty;
 };
 
+// Проверка на ведущий символ хэша
+var checkFirstHash = function (set) {
+  var allHasHashes = true;
+  for (var el of set) {
+    if (el[0] !== '#') {
+      allHasHashes = false;
+      break;
+    }
+  }
+  return allHasHashes;
+};
+
+// Проверка на не буквенные и нетекстовые символы
+var checkLettersAndNumbersSymbols = function (set) {
+  var hasOnlyLettersAndNumbers = true;
+  var regexp = new RegExp('/^[а-яА-ЯёЁa-zA-Z0-9]+$/', 'gm');
+  for (var el of set) {
+    var croppedEl = el.slice(1);
+    var result = croppedEl.match(regexp);
+    if (result === null) {
+      hasOnlyLettersAndNumbers = false;
+      break;
+    }
+  }
+  return hasOnlyLettersAndNumbers;
+};
+
 // Обработчик события input на поле хэштэгов
 var hashFieldInputHandler = function (evt) {
   var hashString = evt.target === hashField ? evt.target.value : '';
@@ -156,13 +192,6 @@ var hashFieldInputHandler = function (evt) {
   });
 
   var hashSet = new Set(hashesArray); // Формируем сет
-
-  var HashValidText = {
-    DO_NOT_REPEAT: 'Хэштеги не должны повторяться',
-    NO_MORE_TAGS: 'Хэштегов должно быть НЕ больше ',
-    NOT_ONE_HASH_SYMBOL: 'Хэштег не может состоять только из одного символа #',
-    NOT_LONGER_HASH: 'Максимальное количество символов в одном хэше - '
-  };
 
   if (hashesArray.length > hashSet.size) {
     hashField.setCustomValidity(HashValidText.DO_NOT_REPEAT);
@@ -176,12 +205,17 @@ var hashFieldInputHandler = function (evt) {
   } else if (checkElementLength(hashSet)) {
     hashField.setCustomValidity(HashValidText.NOT_LONGER_HASH + HASHTAG_MAX_LENGTH);
     hashField.classList.add('invalid');
+  } else if (!checkFirstHash(hashSet)) {
+    hashField.setCustomValidity(HashValidText.NEED_FIRST_HASH);
+    hashField.classList.add('invalid');
+  } else if (!checkLettersAndNumbersSymbols(hashSet)) {
+    hashField.setCustomValidity(HashValidText.ONLY_LETTERS_NUMBERS);
+    hashField.classList.add('invalid');
   } else {
     hashField.setCustomValidity('');
     hashField.classList.remove('invalid');
   }
 
-  // console.log(hashSet);
 };
 
 // Обработчик события input на поле description
